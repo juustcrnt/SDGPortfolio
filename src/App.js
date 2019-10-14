@@ -14,18 +14,18 @@ import femen from './4.jpg'
 
 const data = require('./data.json')
 const stocks = require('./stocks.json')
+const profiles = require('./profiles.json')
 
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      loading: "bra",
       catVal: [''],
       allItems: [],
-      selectedCustomer : 1,
+      angles: [],
+      selectedCustomer : 0,
     };
 }
 
@@ -57,6 +57,8 @@ componentDidMount() {
   }
 
   this.setState({allItems: itemsArray})
+  {/*this.setState({angles: this.divvy(6.28318530718, 17, 0.02)})*/}
+  this.divise(profiles[this.state.selectedCustomer])
 }
 
 divvy(number, parts, min) {
@@ -73,8 +75,23 @@ divvy(number, parts, min) {
   return out.map(function (el) { return el * mult + min; });
 }
 
-changeCustomer (c) {
-  this.setState({selectedCustomer: c})
+divise(array) {
+  let original = array.Stocks
+
+  let newAngles = original.map(function(e) {
+    if(e > 0 ){
+      return (e/100)*6.28318530718
+    } else {
+      return 0.001
+    }
+  })
+  console.log(newAngles)
+  this.setState({angles: newAngles})
+}
+
+async changeCustomer (c) {
+  await this.setState({selectedCustomer: c})
+  await this.divise(profiles[this.state.selectedCustomer])
 }
 
   render () {
@@ -140,13 +157,13 @@ changeCustomer (c) {
               <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul className="navbar-nav">
                   <li className="nav-item">
-                    <a className="nav-link" onClick={() => {this.changeCustomer(1)}}>Charles Koch </a>
+                    <a className="nav-link" onClick={() => {this.changeCustomer(0)}}>Greta Thunder</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" onClick={() => {this.changeCustomer(2)}}>Greta Thunder</a>
+                    <a className="nav-link" onClick={() => {this.changeCustomer(1)}}>Germaine de Beauvoir</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" onClick={() => {this.changeCustomer(3)}}>Germaine de Beauvoir </a>
+                    <a className="nav-link" onClick={() => {this.changeCustomer(2)}}>Charles Koch</a>
                   </li>
                 </ul>
                 <ul className="navbar-nav ml-md-auto">
@@ -157,10 +174,7 @@ changeCustomer (c) {
               </div>
             </nav>
 
-          {this.state.selectedCustomer == 1 ?  <Graph data ={datas} angle= {this.divvy(6.28318530718, 17, 0.02)}/> : ''}
-          {this.state.selectedCustomer == 2 ? <img src={greta} alt="Logo" height="500" width="1000" /> : ''}
-          {this.state.selectedCustomer == 3 ? <img src={femen} alt="Logo" height="500" width="1000" /> : ''}
-
+          <Graph data ={datas} angle= {this.state.angles}/>
           <List items={this.state.allItems} numbers={this.state.catVal}/>
 
           </div>

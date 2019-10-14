@@ -48,7 +48,6 @@ class List extends React.Component {
                     </thead>
                     <tbody>
                       {this.props.items.map(function(item) {
-                        console.log(number)
                         if(item.sector === number) {
                           return (
                           <tr>
