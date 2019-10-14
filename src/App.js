@@ -4,12 +4,17 @@ import logo from './logo.svg';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.js';
-import { Polar } from 'react-chartjs-2';
+
+
+import Graph from './components/Graph';
+import List from './components/List';
 
 import greta from './3.jpg'
 import femen from './4.jpg'
+
 const data = require('./data.json')
 const stocks = require('./stocks.json')
+
 
 class App extends Component {
 
@@ -71,75 +76,12 @@ divvy(number, parts, min) {
 changeCustomer (c) {
   this.setState({selectedCustomer: c})
 }
+
   render () {
-
-
-
-  const numbers = this.state.catVal
-  console.log(numbers)
 
   let i = 0
 
-
   const items = this.state.allItems;
-
-    const nameItems = items.map((item) =>
-
-
-    <tr>
-      <td>{item.name}</td>
-      <td>{item.currency}</td>
-      <td>{item.amount}</td>
-      <td>{item.portfolio}</td>
-      <td>{item.sdgGlobal}</td>
-      <td>{item.sdgGlobalSector}</td>
-    </tr>
-);
-
-
-  const listItems = numbers.map((number, i) =>
-      // Correct! Key should be specified inside the array.
-
-            <div className="card">
-                  <div className="card-header">
-                    <a className="card-link" data-toggle="collapse" data-parent="#card-530014" href={"#card-element-" + i}>{number}</a>
-                  </div>
-                  <div id={"card-element-" + i} className="collapse">
-                    <div className="card-body">
-                    <table className="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Currency</th>
-            <th scope="col">Amount</th>
-            <th scope="col">% Portfolio</th>
-            <th scope="col">SDG Global</th>
-            <th scope="col">SDG Global Sector</th>
-          </tr>
-        </thead>
-        <tbody>
-      {items.map(function(item) {
-        console.log(number)
-        if(item.sector === number) {
-          return (
-          <tr>
-            <td>{item.name}</td>
-            <td>{item.currency}</td>
-            <td>{item.amount}</td>
-            <td>{item.portfolio}</td>
-            <td style={item.sdgGlobal > item.sdgGlobalSector ? {backgroundColor : "green"} : {backgroundColor : "red"}}>{item.sdgGlobal}</td>
-            <td>{item.sdgGlobalSector}</td>
-          </tr>
-        );
-        }
-
-    })}
-        </tbody>
-      </table>
-                    </div>
-                  </div>
-  </div>
-  );
 
   let datas = {
   datasets: [{
@@ -215,28 +157,12 @@ changeCustomer (c) {
               </div>
             </nav>
 
-
-          {this.state.selectedCustomer == 1 ?  <Polar
-                        data={datas}
-                        options={
-                          { legend: {
-                              display: true,
-                              position: 'right'
-                            },
-                            elements: {
-                              arc: {
-                                angle: this.divvy(6.28318530718, 17, 0.02)
-                              }
-                            }
-                        }
-                      }
-                      /> : ''}
+          {this.state.selectedCustomer == 1 ?  <Graph data ={datas} angle= {this.divvy(6.28318530718, 17, 0.02)}/> : ''}
           {this.state.selectedCustomer == 2 ? <img src={greta} alt="Logo" height="500" width="1000" /> : ''}
           {this.state.selectedCustomer == 3 ? <img src={femen} alt="Logo" height="500" width="1000" /> : ''}
 
-            <div id="card-530014">
-            {listItems}
-            </div>
+          <List items={this.state.allItems} numbers={this.state.catVal}/>
+
           </div>
         </div>
       </div>
